@@ -20,7 +20,7 @@ import {
 const Psu = () => {
   const toast = useToast();
   const [submit, setsubmit] = useState(false);
-  const [psu, setpsu] = useState();
+  const [psu, setpsu] = useState([]);
   const [set, setval] = useState({
     name: "",
     brand: "",

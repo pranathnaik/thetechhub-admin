@@ -17,7 +17,6 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 const Storage = () => {
-  const [storage, setstorage] = useState([  ]);
   const [set, setval] = useState({
     name: "",
     brand: "",
@@ -26,8 +25,11 @@ const Storage = () => {
     cache: "",
     type: "",
     interface: "",
+    image: "",
     price: "",
   });
+  const [storage, setstorage] = useState([]);
+  console.log(storage);
   const onchange = (event) => {
     setval({ ...set, [event.target.name]: event.target.value });
   };
@@ -52,7 +54,7 @@ const Storage = () => {
         setsubmit(false);
         toast({
           title: "There was an error",
-          description: `${err} occured`,
+          description: `${err.response.data.msg} occured`,
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -60,7 +62,7 @@ const Storage = () => {
       });
   };
   const removefunc = (id) => {
-    Axios.delete(`http://localhost:5000/storage/delete${id._id}`).then(() => {
+    Axios.delete(`http://localhost:5000/storage/delete/${id._id}`).then(() => {
       toast({
         title: "Storage deleted",
         description: `${id.name} Deleted`,
@@ -80,7 +82,7 @@ const Storage = () => {
   return (
     <>
       <Flex>
-        <Box overflow="auto" w="75%" h="700px">
+        <Box overflow="auto" w="75%" h="80vh">
           <Table variant="striped" colorScheme="teal">
             <Thead>
               <Tr>
@@ -91,6 +93,7 @@ const Storage = () => {
                 <Th>cache</Th>
                 <Th>type </Th>
                 <Th>interface</Th>
+                <Th>image</Th>
                 <Th>price</Th>
                 <Th>action</Th>
               </Tr>
@@ -102,11 +105,12 @@ const Storage = () => {
                     <Tr>
                       <Td>{value.name}</Td>
                       <Td>{value.brand}</Td>
-                      <Td>{value.form_factor}</Td>
+                      <Td>{value.model}</Td>
                       <Td>{value.rpm}</Td>
                       <Td>{value.cache}</Td>
                       <Td>{value.type}</Td>
                       <Td>{value.interface}</Td>
+                      <Td>{value.image}</Td>
                       <Td>{value.price}</Td>
                       <Td>
                         <Button
@@ -168,6 +172,12 @@ const Storage = () => {
               placeholder="interface"
               name="interface"
               type="text"
+              onChange={onchange}
+            />
+            <Input
+              placeholder="file"
+              name="image"
+              type="file"
               onChange={onchange}
             />
             <Input

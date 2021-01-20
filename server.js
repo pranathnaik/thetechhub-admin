@@ -8,15 +8,9 @@ app.use(express.json());
 app.use(cors());
 
 const port = process.env.PORT || 5000;
-//Routes
-
-const LaptopModel = require("./models/Laptop");
-const CoolerModel = require("./models/Cooler");
-const AdminModel = require("./models/Admin");
-const CustomerModel = require("./models/Customer");
 
 mongoose
-  .connect(process.env.MONGODB_URI, {
+  .connect(process.env.MONGODB_CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -25,17 +19,19 @@ mongoose
     console.log("DB connection success");
   })
   .catch((err) => {
-    console.log("there was an error" + err);
+    console.log(err);
   });
 
 app.use("/processor", require("./routes/processor"));
 app.use("/graphicscard", require("./routes/graphicscard"));
 app.use("/motherboard", require("./routes/motherboard"));
-app.use("/ram", require("./routes/ram"));
 app.use("/cabinet", require("./routes/cabinet"));
 app.use("/psu", require("./routes/psu"));
+app.use("/ram", require("./routes/ram"));
 app.use("/storage", require("./routes/storage"));
 app.use("/settings", require("./routes/adminRoute"));
+app.use("/laptop", require("./routes/laptopRoute"));
+
 app.listen(port, (req, res) => {
-  console.log("listeneing to prot " + port);
+  console.log("server started on port " + port);
 });

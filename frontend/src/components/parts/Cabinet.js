@@ -93,6 +93,7 @@ const Cabinet = () => {
                 <Th>model</Th>
                 <Th>type</Th>
                 <Th>color</Th>
+                <Th>image</Th>
                 <Th>price</Th>
                 <Th>action</Th>
               </Tr>
@@ -108,6 +109,7 @@ const Cabinet = () => {
                       <Td>{value.model}</Td>
                       <Td>{value.type}</Td>
                       <Td>{value.color}</Td>
+                      <Td>{value.image}</Td>
                       <Td>{value.price}</Td>
                       <Td>
                         <Button

@@ -1,26 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Box,
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  Form,
-  Field,
   Button,
   Input,
   Flex,
   Center,
-  Image,
-  Spacer,
   Stack,
 } from "@chakra-ui/react";
 import imga from "./login.png";
+import axios from "axios";
+import AdminContext from "../context/AdminContext";
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
   const [user, setuser] = useState({ email: "", password: "" });
   const [message, setmessage] = useState(null);
   const [submit, setsubmit] = useState(false);
+  const { setadmin } = useContext(AdminContext);
+  const history = useHistory();
   const onsub = (event) => {
     event.preventDefault();
   };
@@ -31,8 +30,16 @@ const Login = () => {
     console.log(user);
   };
 
-  const login = () => {
-    console.log(user.email);
+  const login = async () => {
+    const res = await axios.post("http://localhost:5000/settings/login", {
+      ...user,
+    });
+    if (res) {
+      console.log(res.data);
+      setadmin({ id: res.data.admin.id, admin: res.data.admin });
+      localStorage.setItem("x-auth-id", res.data.admin.id);
+      history.push("/");
+    }
   };
   return (
     <>

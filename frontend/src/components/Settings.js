@@ -3,16 +3,10 @@ import {
   Box,
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  Form,
-  Field,
   Button,
   Input,
   Flex,
   Center,
-  Image,
-  Spacer,
   Stack,
   useToast,
 } from "@chakra-ui/react";
@@ -24,17 +18,18 @@ const Settings = () => {
     passwordCheck: "",
     displayName: "",
   });
-  const [message, setmessage] = useState(null);
+
   const toast = useToast();
   const [submit, setsubmit] = useState(false);
-  const onsub = () => {
-    const res = Axios.post("http://localhost:5000/settings/register", user)
+  const onsub = async () => {
+    setsubmit(true);
+    await Axios.post("http://localhost:5000/settings/register", user)
       .then((res) => {
         setsubmit(false);
         console.log(res);
         toast({
-          title: "Ram Card Added",
-          description: "${res.data.displayName}",
+          title: "new admin added",
+          description: `${res.data.displayName}`,
           status: "success",
           duration: 9000,
           isClosable: true,
@@ -42,7 +37,6 @@ const Settings = () => {
       })
       .catch((err) => {
         setsubmit(false);
-
         toast({
           title: "There was an error",
           description: `${err.response.data.msg}`,
@@ -57,9 +51,6 @@ const Settings = () => {
     setuser({ ...user, [event.target.name]: event.target.value });
   };
 
-  const login = () => {
-    console.log(user.email);
-  };
   return (
     <>
       <Flex justify h="80vh" w="100%">

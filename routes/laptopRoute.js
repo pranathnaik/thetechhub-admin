@@ -1,62 +1,65 @@
 const express = require("express");
 const router = express.Router();
 
-const StorageModel = require("../models/Storage");
+const LaptopModel = require("../models/Laptop");
 
 router.post("/add", async (req, res) => {
   const {
     name,
     brand,
     model,
-    rpm,
-    cache,
-    type,
-    interface,
+    processor,
+    ram,
+    storage,
+    graphics_card,
+    features,
     image,
     price,
   } = req.body;
-  console.log(req.body);
 
+  console.log(req.body);
   if (
     !name ||
     !brand ||
     !model ||
-    !rpm ||
-    !cache ||
-    !type ||
-    !interface ||
+    !processor ||
+    !ram ||
+    !storage ||
+    !graphics_card ||
+    !features ||
     !image ||
     !price
   )
-    res.status(401).json({ msg: "all fields are required" });
+    res.status(400).json({ msg: "all fields are required" });
 
-  const storage = await new StorageModel({
+  const Laptop = await new LaptopModel({
     name,
     brand,
     model,
-    rpm,
-    cache,
-    type,
-    interface,
+    processor,
+    ram,
+    storage,
+    graphics_card,
+    features,
     image,
     price,
   });
 
-  storage
-    .save()
+  Laptop.save()
     .then(() => {
-      res.status(200).json({ msg: "storage has been added " });
+      res.status(200).json({ msg: "Laptop was added" });
     })
     .catch((err) => {
-      res.status(400).json({ msg: `there was error while adding${err}` });
+      res.status(400).json({ msg: "there was an error" });
+      console.log(err);
     });
 });
 
 router.get("/view", (req, res) => {
-  StorageModel.find({}, (err, result) => {
+  LaptopModel.find({}, (err, result) => {
     if (err)
       res
-        .status(404)
+        .status(400)
         .json({ msg: "check your internet connection and try again later" });
     else res.send(result);
   });
@@ -64,8 +67,7 @@ router.get("/view", (req, res) => {
 
 router.delete("/delete/:id", (req, res) => {
   const id = req.params.id;
-  console.log(id);
-  StorageModel.findByIdAndRemove(id)
+  LaptopModel.findByIdAndRemove(id)
     .then((e) => {
       console.log("delete" + e);
       res.send("deleted");

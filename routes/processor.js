@@ -3,15 +3,37 @@ const router = express.Router();
 
 const ProcessorModel = require("../models/Processor");
 router.post("/add", async (req, res) => {
+  const {
+    name,
+    brand,
+    cores,
+    model,
+    speed,
+    socket_type,
+    image,
+    price,
+  } = req.body;
+
+  if (
+    !name ||
+    !brand ||
+    !cores ||
+    !model ||
+    !speed ||
+    !socket_type ||
+    !image ||
+    !price
+  )
+    res.status(401).json({ msg: "all fields are required please try again" });
   const processor = await new ProcessorModel({
-    name: req.body.name,
-    brand: req.body.brand,
-    cores: req.body.cores,
-    model: req.body.model,
-    speed: req.body.speed,
-    socket_type: req.body.socket,
-    image: req.body.image,
-    price: req.body.price,
+    name,
+    brand,
+    cores,
+    model,
+    speed,
+    socket_type,
+    image,
+    price,
   });
 
   processor
@@ -21,18 +43,19 @@ router.post("/add", async (req, res) => {
       console.log("inserted");
     })
     .catch((err) => {
-      res.status(400).send("it was not inserted" + err);
+      res.status(400).json({ msg: `there was an error 
+      ` });
       console.log("not inserted");
     });
 });
 
 router.get("/view", (req, res) => {
   ProcessorModel.find({}, (err, result) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send(result);
-    }
+    if (err)
+      res
+        .status(404)
+        .json({ msg: "check your internet connection and try again later" });
+    else res.send(result);
   });
 });
 

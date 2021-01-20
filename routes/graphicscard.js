@@ -29,7 +29,10 @@ router.post("/add", async (req, res) => {
 
 router.get("/view", (req, res) => {
   GraphicsCardModel.find({}, (err, result) => {
-    if (err) res.send(err);
+    if (err)
+      res
+        .status(404)
+        .json({ msg: "check your internet connection and try again later" });
     else res.send(result);
   });
 });

@@ -1,11 +1,109 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Button,
+  Flex,
+  useToast,
+  Box,
+} from "@chakra-ui/react";
+import SideDrawer from "./layout/SideDrawer";
+
+import Axios from "axios";
 
 const Laptop = () => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
+  const toast = useToast();
+  const [laptop, setlaptop] = useState([]);
+  const removefunc = async (id) => {
+    await Axios.delete(`http://localhost:5000/laptop/delete/${id._id}`).then(
+      () => {
+        toast({
+          title: "laptop deleted",
+          description: `${id.name} Deleted`,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+    );
+  };
 
-export default Laptop
+  useEffect(() => {
+    Axios.get("http://localhost:5000/laptop/view")
+      .then((response) => {
+        setlaptop(response.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        toast({
+          title: "there was an error",
+          description: `${err.response.data.msg}`,
+          status: "warning",
+          duration: 9000,
+          isClosable: true,
+        });
+      });
+  }, [laptop]);
+  return (
+    <>
+      <Flex>
+        <SideDrawer />
+        <Box overflow="auto" w="100%" h="80vh">
+          <Table variant="striped" colorScheme="teal">
+            <Thead>
+              <Tr>
+                <Th>name</Th>
+                <Th>brand</Th>
+                <Th>model</Th>
+                <Th>processor</Th>
+                <Th>ram</Th>
+                <Th>storage</Th>
+                <Th>graphics_card</Th>
+                <Th>features</Th>
+                <Th>image</Th>
+                <Th>price</Th>
+                <Th>edit</Th>
+                <Th>delete</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {laptop.map((value) => {
+                return (
+                  <>
+                    <Tr>
+                      <Td>{value.name}</Td>
+                      <Td>{value.brand}</Td>
+                      <Td>{value.model}</Td>
+                      <Td>{value.processor}</Td>
+                      <Td>{value.ram}</Td>
+                      <Td>{value.storage}</Td>
+                      <Td>{value.graphics_card}</Td>
+                      <Td>{value.features}</Td>
+                      <Td>{value.image}</Td>
+                      <Td>{value.price}</Td>
+                      <Td>
+                        <Button
+                          colorScheme="teal"
+                          variant="ghost"
+                          onClick={() => removefunc(value)}
+                        >
+                          REMOVE
+                        </Button>
+                      </Td>
+                    </Tr>
+                  </>
+                );
+              })}
+            </Tbody>
+          </Table>
+        </Box>
+      </Flex>
+    </>
+  );
+};
+
+export default Laptop;

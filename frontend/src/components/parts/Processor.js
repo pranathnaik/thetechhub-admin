@@ -54,7 +54,7 @@ const Processor = () => {
         setsubmit(false);
         toast({
           title: "There was an error",
-          description: `${err} occured`,
+          description: `${err.response.data.msg} `,
           status: "error",
           duration: 9000,
           isClosable: true,

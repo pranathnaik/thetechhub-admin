@@ -1,13 +1,14 @@
 const router = require("express").Router();
 const Admin = require("../models/Admin");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+
+const auth = require("../middleware/auth");
+require("dotenv").config();
 
 router.post("/register", async (req, res) => {
- 
   try {
     let { email, password, passwordCheck, displayName } = req.body;
-   
+
     if (!email || !password || !passwordCheck)
       return res.status(400).json({ msg: "not all fields have been enteredd" });
 
@@ -19,26 +20,27 @@ router.post("/register", async (req, res) => {
     if (password !== passwordCheck)
       return res.status(400).json({ msg: "enter the same password twice" });
 
-    const existingUser = await Admin.findOne({ email: email });
+    const existingadmin = await Admin.findOne({ email: email });
 
-    if (existingUser)
+    if (existingadmin)
       return res.status(400).json({ msg: "account with same email exist" });
 
     if (!displayName) displayName = email;
 
     const salt = await bcrypt.genSalt();
+    console.log(salt);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const newUser = new Admin({
+    const newadmin = new Admin({
       email,
       password: passwordHash,
       displayName,
     });
 
-    const savedUser = await newUser.save();
-    res.send(savedUser);
+    const savedadmin = await newadmin.save();
+    res.send(savedadmin);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ msg: `${err.message}` });
   }
 });
 
@@ -48,35 +50,32 @@ router.post("/login", async (req, res) => {
     if (!email || !password)
       return res.status(400).json({ msg: "not all fields have been enteredd" });
 
-    const user = await Admin.findOne({ email: email });
-    if (!user)
+    const admin = await Admin.findOne({ email: email });
+    if (!admin)
       return res
         .status(400)
         .json({ msg: "no account with this email registerd" });
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, admin.password);
 
     if (!isMatch) return res.status(400).json({ msg: "invalid credentials" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-
     res.json({
-      token,
-      user: {
-        id: user._id,
-        displayName: user.displayName,
-        email: user.email,
+      admin: {
+        id: admin._id,
+        displayName: admin.displayName,
+        email: admin.email,
       },
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 });
 
-router.delete("/delete", async (req, res) => {
+router.delete("/delete", auth, async (req, res) => {
   try {
-    const deletedUser = await Admin.findByIdAndDelete(req.user);
-    res.json(deletedUser);
+    const deletedadmin = await Admin.findByIdAndDelete(req.admin);
+    res.json(deletedadmin);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -84,15 +83,27 @@ router.delete("/delete", async (req, res) => {
 
 router.post("/tokenIsValid", async (req, res) => {
   try {
-    const token = req.header("x-auth-token");
+    const id = req.header("x-auth-id");
+   
+    if (!id) return res.status(401).json(false);
 
-    if (!token) return res.status(401).json(false);
-    const verfied = jwt.verify(token, process.env.JWT_SECRET);
-    if (!verfied) return res.status(401).json(false);
-    const user = await User.findById(verfied.id);
-    if (!user) return res.json(false);
-    return res.json(true);
-  } catch (e) {}
+    const admin = await Admin.findById(id);
+
+    if (!admin) return res.json(false);
+
+    return res.status(200).json(true);
+  } catch (e) {
+    console.log(e.message);
+  }
+});
+
+router.get("/", auth, async (req, res) => {
+  try {
+    const admin = await Admin.findById(req.admin);
+    return res.json(admin);
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 module.exports = router;

@@ -7,8 +7,9 @@ const laptopSchema = mongoose.Schema({
   processor: { type: String, required: true },
   ram: { type: String, required: true },
   storage: { type: String, required: true },
-  graphics_card: { type: Number, required: true },
+  graphics_card: { type: String, required: true },
   features: { type: String, required: true },
+  image: { type: String, required: true },
   price: { type: Number, required: true },
 });
 

@@ -8,6 +8,7 @@ const storageSchema = mongoose.Schema({
   cache: { type: String, required: true },
   type: { type: String, required: true },
   interface: { type: String, required: true },
+  image: { type: String, required: true },
   price: { type: Number, required: true },
 });
 
