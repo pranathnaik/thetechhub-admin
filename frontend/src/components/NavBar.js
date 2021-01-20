@@ -103,7 +103,7 @@ const NavBar = () => {
               </Link>
             </>
           ) : (
-            <Button leftIcon={<FaHome />} variant="link" size="md">
+            <Button variant="link" size="md">
               <Link to="/login">login</Link>
             </Button>
           )}

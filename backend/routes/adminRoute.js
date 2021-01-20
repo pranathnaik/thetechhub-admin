@@ -48,7 +48,7 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password)
-      return res.status(400).json({ msg: "not all fields have been enteredd" });
+      return res.status(400).json({ msg: "pls enter all fields" });
 
     const admin = await Admin.findOne({ email: email });
     if (!admin)
@@ -68,7 +68,7 @@ router.post("/login", async (req, res) => {
       },
     });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ msg: err.message });
   }
 });
 
@@ -84,7 +84,7 @@ router.delete("/delete", auth, async (req, res) => {
 router.post("/tokenIsValid", async (req, res) => {
   try {
     const id = req.header("x-auth-id");
-   
+
     if (!id) return res.status(401).json(false);
 
     const admin = await Admin.findById(id);

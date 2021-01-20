@@ -15,8 +15,10 @@ import Login from "./components/Login";
 import Settings from "./components/Settings";
 import Axios from "axios";
 import AdminContext from "./context/AdminContext";
+import { useHistory } from "react-router-dom";
 
 function App() {
+  const history = useHistory();
   const [admin, setadmin] = useState({
     id: undefined,
     admin: undefined,
@@ -29,6 +31,7 @@ function App() {
       if (idauth === null) {
         localStorage.setItem("x-auth-id", null);
         idauth = "";
+        history.push("/login");
       }
 
       const idRes = await Axios.post(
