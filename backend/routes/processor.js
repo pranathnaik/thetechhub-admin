@@ -43,14 +43,16 @@ router.post("/add", async (req, res) => {
       console.log("inserted");
     })
     .catch((err) => {
-      res.status(400).json({ msg: `there was an error 
-      ` });
+      res.status(400).json({
+        msg: `there was an error 
+      `,
+      });
       console.log("not inserted");
     });
 });
 
-router.get("/view", (req, res) => {
-  ProcessorModel.find({}, (err, result) => {
+router.get("/view", async (req, res) => {
+  await ProcessorModel.find({}, (err, result) => {
     if (err)
       res
         .status(404)
@@ -59,9 +61,9 @@ router.get("/view", (req, res) => {
   });
 });
 
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   const id = req.params.id;
-  ProcessorModel.findByIdAndRemove(id)
+  await ProcessorModel.findByIdAndRemove(id)
     .then((e) => {
       console.log("delete" + e);
       res.send("deleted");

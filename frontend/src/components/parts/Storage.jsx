@@ -16,34 +16,35 @@ import {
   Box,
   Spacer,
 } from "@chakra-ui/react";
-
-const Psu = () => {
-  const toast = useToast();
-  const [submit, setsubmit] = useState(false);
-  const [psu, setpsu] = useState([]);
+const Storage = () => {
   const [set, setval] = useState({
     name: "",
     brand: "",
     model: "",
-    power: "",
-    efficiency: "",
+    rpm: "",
+    cache: "",
+    type: "",
+    interface: "",
     image: "",
     price: "",
   });
+  const [storage, setstorage] = useState([]);
+  console.log(storage);
   const onchange = (event) => {
     setval({ ...set, [event.target.name]: event.target.value });
   };
-  const addpsu = () => {
+  const toast = useToast();
+  const [submit, setsubmit] = useState(false);
+  const addstorage = () => {
     setsubmit(true);
-
-    Axios.post("http://localhost:5000/psu/add", {
+    Axios.post("http://localhost:5000/storage/add", {
       ...set,
     })
       .then((res) => {
         setsubmit(false);
         toast({
-          title: "Psu Added",
-          description: "We've Added Psu in database",
+          title: "Storage Added",
+          description: "We've Added Storage in database",
           status: "success",
           duration: 9000,
           isClosable: true,
@@ -53,18 +54,17 @@ const Psu = () => {
         setsubmit(false);
         toast({
           title: "There was an error",
-          description: `${err} occured`,
+          description: `${err.response.data.msg} occured`,
           status: "error",
           duration: 9000,
           isClosable: true,
         });
       });
   };
-
   const removefunc = (id) => {
-    Axios.delete(`http://localhost:5000/psu/delete/${id._id}`).then(() => {
+    Axios.delete(`http://localhost:5000/storage/delete/${id._id}`).then(() => {
       toast({
-        title: "Psu deleted",
+        title: "Storage deleted",
         description: `${id.name} Deleted`,
         status: "error",
         duration: 9000,
@@ -74,39 +74,45 @@ const Psu = () => {
   };
 
   useEffect(() => {
-    Axios.get("http://localhost:5000/psu/view").then((response) => {
-      setpsu(response.data);
+    Axios.get("http://localhost:5000/storage/view").then((response) => {
+      setstorage(response.data);
     });
-  }, [psu]);
+  }, [storage]);
 
   return (
     <>
       <Flex>
-        <Box overflow="auto" w="75%" h="700px">
+        <Box overflow="auto" w="75%" h="90vh">
           <Table variant="striped" colorScheme="teal">
             <Thead>
               <Tr>
-                <Th>name</Th>
-                <Th>brand</Th>
+                <Th>Name</Th>
+                <Th>Brand</Th>
                 <Th>model</Th>
-                <Th>power</Th>
-                <Th>efficiency</Th>
+                <Th>rpm</Th>
+                <Th>cache</Th>
+                <Th>type </Th>
+                <Th>interface</Th>
                 <Th>image</Th>
                 <Th>price</Th>
                 <Th>action</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {psu.map((value) => {
+              {storage.map((value) => {
                 return (
                   <>
                     <Tr>
                       <Td>{value.name}</Td>
                       <Td>{value.brand}</Td>
                       <Td>{value.model}</Td>
-                      <Td>{value.power}</Td>
-                      <Td>{value.efficiency}</Td>
-                      <Td>{value.image}</Td>
+                      <Td>{value.rpm}</Td>
+                      <Td>{value.cache}</Td>
+                      <Td>{value.type}</Td>
+                      <Td>{value.interface}</Td>
+                      <Td>
+                        <img src={value.image} alt="" />
+                      </Td>
                       <Td>{value.price}</Td>
                       <Td>
                         <Button
@@ -126,8 +132,8 @@ const Psu = () => {
         </Box>
         <Spacer />
         <Box w="20%">
-          <FormControl enctype="multipart/form-data">
-            <FormLabel>Add PSU</FormLabel>
+          <FormControl>
+            <FormLabel>Add storage</FormLabel>
             <Input
               placeholder="Name"
               name="name"
@@ -141,38 +147,49 @@ const Psu = () => {
               onChange={onchange}
             />
             <Input
-              placeholder="model"
+              placeholder="Form Factor"
               name="model"
               type="text"
               onChange={onchange}
             />
             <Input
-              placeholder="power"
-              name="power"
-              type="number"
-              onChange={onchange}
-            />
-            <Input
-              placeholder="efficiency"
-              name="efficiency"
+              placeholder="rpm"
+              name="rpm"
               type="text"
               onChange={onchange}
             />
-            <Input type="file" name="image" onChange={onchange} />
+
+            <Input
+              placeholder="type"
+              name="type"
+              type="text"
+              onChange={onchange}
+            />
+            <Input
+              placeholder="interface"
+              name="interface"
+              type="text"
+              onChange={onchange}
+            />
+            <Input
+              placeholder="image"
+              name="image"
+              type="text"
+              onChange={onchange}
+            />
             <Input
               placeholder="Price"
               name="price"
               type="number"
               onChange={onchange}
             />
-
             <Button
               width="100%"
               colorScheme="green"
               borderColor="green.500"
-              onClick={addpsu}
               isLoading={submit}
               loadingText="Submitting"
+              onClick={addstorage}
             >
               Add
             </Button>
@@ -184,4 +201,4 @@ const Psu = () => {
   );
 };
 
-export default Psu;
+export default Storage;

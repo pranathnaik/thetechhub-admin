@@ -4,17 +4,7 @@ const router = express.Router();
 const StorageModel = require("../models/Storage");
 
 router.post("/add", async (req, res) => {
-  const {
-    name,
-    brand,
-    model,
-    rpm,
-    cache,
-    type,
-    interface,
-    image,
-    price,
-  } = req.body;
+  const { name, brand, model, rpm, type, interface, image, price } = req.body;
   console.log(req.body);
 
   if (
@@ -22,7 +12,6 @@ router.post("/add", async (req, res) => {
     !brand ||
     !model ||
     !rpm ||
-    !cache ||
     !type ||
     !interface ||
     !image ||
@@ -35,7 +24,6 @@ router.post("/add", async (req, res) => {
     brand,
     model,
     rpm,
-    cache,
     type,
     interface,
     image,
@@ -52,8 +40,8 @@ router.post("/add", async (req, res) => {
     });
 });
 
-router.get("/view", (req, res) => {
-  StorageModel.find({}, (err, result) => {
+router.get("/view", async (req, res) => {
+  await StorageModel.find({}, (err, result) => {
     if (err)
       res
         .status(404)
@@ -62,10 +50,10 @@ router.get("/view", (req, res) => {
   });
 });
 
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   const id = req.params.id;
   console.log(id);
-  StorageModel.findByIdAndRemove(id)
+  await StorageModel.findByIdAndRemove(id)
     .then((e) => {
       console.log("delete" + e);
       res.send("deleted");

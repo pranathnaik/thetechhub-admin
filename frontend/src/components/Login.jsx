@@ -18,7 +18,7 @@ import { useHistory } from "react-router-dom";
 const Login = () => {
   const toast = useToast();
   const [user, setuser] = useState({ email: "", password: "" });
-  const [message, setmessage] = useState(null);
+
   const [submit, setsubmit] = useState(false);
   const { setadmin } = useContext(AdminContext);
 
@@ -47,7 +47,7 @@ const Login = () => {
     } catch (e) {
       setsubmit(false);
       toast({
-        title: `${e.response.data.msg}`,
+        title: `error`,
         description: `${e.response.data.msg}`,
         status: "error",
         duration: 9000,

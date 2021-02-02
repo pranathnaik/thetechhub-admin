@@ -1,20 +1,24 @@
 const express = require("express");
 const router = express.Router();
 
-const GraphicsCardModel = require("../models/GraphicsCard");
+const PrebuildModel = require("../models/Prebuild");
 router.post("/add", async (req, res) => {
-  const graphics = await new GraphicsCardModel({
+
+  const prebuild = await new PrebuildModel({
     name: req.body.name,
-    brand: req.body.brand,
-    model: req.body.model,
-    clock_speed: req.body.clock_speed,
-    memory: req.body.memory,
-    interface: req.body.interface,
+    processor: req.body.processor,
+    motherboard: req.body.motherboard,
+    graphicscard: req.body.graphicscard,
+    storage: req.body.storage,
+    cabinet: req.body.cabinet,
+    psu: req.body.psu,
+    ram: req.body.ram,
+    cooler: req.body.cooler,
     image: req.body.image,
     price: req.body.price,
   });
 
-  graphics
+  prebuild
     .save()
     .then(() => {
       res.status(200).send("inserted graphics data");
@@ -27,7 +31,7 @@ router.post("/add", async (req, res) => {
 });
 
 router.get("/view", async (req, res) => {
-  await GraphicsCardModel.find({}, (err, result) => {
+  await PrebuildModel.find({}, (err, result) => {
     if (err)
       res
         .status(404)
@@ -38,7 +42,7 @@ router.get("/view", async (req, res) => {
 
 router.delete("/delete/:id", async (req, res) => {
   const id = req.params.id;
-  await GraphicsCardModel.findByIdAndRemove(id)
+  await PrebuildModel.findByIdAndRemove(id)
     .then((e) => {
       console.log("delete" + e);
       res.send("deleted");

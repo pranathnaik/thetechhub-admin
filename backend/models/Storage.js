@@ -5,7 +5,7 @@ const storageSchema = mongoose.Schema({
   brand: { type: String, required: true },
   model: { type: String, required: true },
   rpm: { type: String, required: true },
-  cache: { type: String, required: true },
+
   type: { type: String, required: true },
   interface: { type: String, required: true },
   image: { type: String, required: true },

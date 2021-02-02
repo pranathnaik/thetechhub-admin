@@ -17,34 +17,34 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 
-const Processor = () => {
-  const [processor, setProcessor] = useState([]);
+const Ram = () => {
   const toast = useToast();
-  const [submit, setsubmit] = useState(false);
   const [set, setval] = useState({
     name: "",
     brand: "",
-    cores: "",
     model: "",
     speed: "",
-    socket_type: "",
+    memory: "",
+    qty: "",
+    type: "",
     image: "",
     price: "",
   });
   const onchange = (event) => {
     setval({ ...set, [event.target.name]: event.target.value });
   };
-  const addprocessor = () => {
+  const [Ram, setRam] = useState([]);
+  const [submit, setsubmit] = useState(false);
+  const addram = () => {
     setsubmit(true);
-
-    Axios.post("http://localhost:5000/processor/add", {
+    Axios.post("http://localhost:5000/ram/add", {
       ...set,
     })
       .then((res) => {
         setsubmit(false);
         toast({
-          title: "Processor Added",
-          description: "We've Added processor in database",
+          title: "Ram Card Added",
+          description: "We've Added Ram card in database",
           status: "success",
           duration: 9000,
           isClosable: true,
@@ -54,7 +54,29 @@ const Processor = () => {
         setsubmit(false);
         toast({
           title: "There was an error",
-          description: `${err.response.data.msg} `,
+          description: `${err} occured`,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      });
+  };
+  const removefunc = (id) => {
+    console.log(id._id);
+    Axios.delete(`http://localhost:5000/ram/delete/${id._id}`)
+      .then((res) => {
+        toast({
+          title: "Ram deleted",
+          description: "We've deleted Ram Card from db",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        toast({
+          title: "There was an error",
+          description: `${err} occured`,
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -62,25 +84,11 @@ const Processor = () => {
       });
   };
 
-  const removefunc = (id) => {
-    Axios.delete(`http://localhost:5000/processor/delete/${id._id}`).then(
-      () => {
-        toast({
-          title: "Processor deleted",
-          description: `${id.name} Deleted`,
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      }
-    );
-  };
-
   useEffect(() => {
-    Axios.get("http://localhost:5000/processor/view").then((response) => {
-      setProcessor(response.data);
+    Axios.get("http://localhost:5000/ram/view").then((response) => {
+      setRam(response.data);
     });
-  }, [processor]);
+  }, [Ram]);
 
   return (
     <>
@@ -91,27 +99,31 @@ const Processor = () => {
               <Tr>
                 <Th>Name</Th>
                 <Th>Brand</Th>
-                <Th>cores</Th>
                 <Th>model</Th>
                 <Th>speed</Th>
-                <Th>socket type</Th>
-                <Th>Image</Th>
+                <Th>memory</Th>
+                <Th>qty</Th>
+                <Th>type</Th>
+                <Th>image</Th>
                 <Th>price</Th>
                 <Th>action</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {processor.map((value) => {
+              {Ram.map((value) => {
                 return (
                   <>
                     <Tr>
                       <Td>{value.name}</Td>
                       <Td>{value.brand}</Td>
-                      <Td>{value.cores}</Td>
                       <Td>{value.model}</Td>
                       <Td>{value.speed}</Td>
-                      <Td>{value.socket_type}</Td>
-                      <Td>{value.image}</Td>
+                      <Td>{value.memory}</Td>
+                      <Td>{value.qty}</Td>
+                      <Td>{value.type}</Td>
+                      <Td>
+                        <img src={value.image} alt="" />
+                      </Td>
                       <Td>{value.price}</Td>
                       <Td>
                         <Button
@@ -132,7 +144,8 @@ const Processor = () => {
         <Spacer />
         <Box w="20%">
           <FormControl enctype="multipart/form-data">
-            <FormLabel>Add CPU</FormLabel>
+            <FormLabel>Add GPU</FormLabel>
+
             <Input
               placeholder="Name"
               name="name"
@@ -146,13 +159,7 @@ const Processor = () => {
               onChange={onchange}
             />
             <Input
-              placeholder="Cores"
-              name="cores"
-              type="number"
-              onChange={onchange}
-            />
-            <Input
-              placeholder="Model"
+              placeholder="model"
               name="model"
               type="text"
               onChange={onchange}
@@ -160,16 +167,33 @@ const Processor = () => {
             <Input
               placeholder="Speed"
               name="speed"
-              type="number"
-              onChange={onchange}
-            />
-            <Input
-              placeholder="Socket Type"
-              name="socket_type"
               type="text"
               onChange={onchange}
             />
-            <Input type="file" name="image" onChange={onchange} />
+            <Input
+              placeholder="Memory"
+              name="memory"
+              type="text"
+              onChange={onchange}
+            />
+            <Input
+              placeholder="qty"
+              name="qty"
+              type="text"
+              onChange={onchange}
+            />
+            <Input
+              placeholder="type"
+              name="type"
+              type="text"
+              onChange={onchange}
+            />
+            <Input
+              placeholder="image"
+              name="image"
+              type="text"
+              onChange={onchange}
+            />
             <Input
               placeholder="Price"
               name="price"
@@ -181,9 +205,9 @@ const Processor = () => {
               width="100%"
               colorScheme="green"
               borderColor="green.500"
-              onClick={addprocessor}
               isLoading={submit}
               loadingText="Submitting"
+              onClick={addram}
             >
               Add
             </Button>
@@ -195,4 +219,4 @@ const Processor = () => {
   );
 };
 
-export default Processor;
+export default Ram;

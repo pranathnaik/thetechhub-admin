@@ -47,8 +47,8 @@ router.post("/add", async (req, res) => {
     });
 });
 
-router.get("/view", (req, res) => {
-  CabinetModel.find({}, (err, result) => {
+router.get("/view", async (req, res) => {
+  await CabinetModel.find({}, (err, result) => {
     if (err)
       res
         .status(404)
@@ -57,9 +57,9 @@ router.get("/view", (req, res) => {
   });
 });
 
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   const id = req.params.id;
-  CabinetModel.findByIdAndRemove(id)
+  await CabinetModel.findByIdAndRemove(id)
     .then((e) => {
       console.log("delete" + e);
       res.send("deleted");

@@ -35,9 +35,9 @@ const Cabinet = () => {
     setval({ ...set, [event.target.name]: event.target.value });
   };
 
-  const addcabinet = () => {
+  const addcabinet = async () => {
     setsubmit(true);
-    Axios.post("http://localhost:5000/cabinet/add", {
+    await Axios.post("http://localhost:5000/cabinet/add", {
       ...set,
     })
       .then((res) => {
@@ -62,16 +62,18 @@ const Cabinet = () => {
       });
   };
 
-  const removefunc = (id) => {
-    Axios.delete(`http://localhost:5000/cabinet/delete/${id._id}`).then(() => {
-      toast({
-        title: "cabinet deleted",
-        description: `${id.name} Deleted`,
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      });
-    });
+  const removefunc = async (id) => {
+    await Axios.delete(`http://localhost:5000/cabinet/delete/${id._id}`).then(
+      () => {
+        toast({
+          title: "cabinet deleted",
+          description: `${id.name} Deleted`,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+    );
   };
 
   useEffect(() => {
@@ -83,7 +85,7 @@ const Cabinet = () => {
   return (
     <>
       <Flex>
-        <Box overflow="auto" w="75%" h="700px">
+        <Box overflow="auto" w="75%" h="90vh">
           <Table variant="striped" colorScheme="teal">
             <Thead>
               <Tr>
@@ -109,7 +111,9 @@ const Cabinet = () => {
                       <Td>{value.model}</Td>
                       <Td>{value.type}</Td>
                       <Td>{value.color}</Td>
-                      <Td>{value.image}</Td>
+                      <Td>
+                        <img src={value.image} alt="" />
+                      </Td>
                       <Td>{value.price}</Td>
                       <Td>
                         <Button
@@ -167,7 +171,12 @@ const Cabinet = () => {
               name="color"
               onChange={onchange}
             />
-            <Input type="file" name="image" onChange={onchange} />
+            <Input
+              type="text"
+              placeholder="image"
+              name="image"
+              onChange={onchange}
+            />
             <Input
               placeholder="Price"
               type="number"

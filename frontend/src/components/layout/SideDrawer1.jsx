@@ -19,20 +19,21 @@ import {
 import { AddIcon } from "@chakra-ui/icons";
 import Axios from "axios";
 
-const SideDrawer = () => {
+const SideDrawer1 = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef();
   const [submit, setsubmit] = useState(false);
   const toast = useToast();
   const [set, setlap] = useState({
     name: "",
-    brand: "",
-    model: "",
     processor: "",
-    ram: "",
+    motherboard: "",
+    graphicscard: "",
     storage: "",
-    graphics_card: "",
-    features: "",
+    cabinet: "",
+    psu: "",
+    ram: "",
+    cooler: "",
     image: "",
     price: "",
   });
@@ -43,14 +44,14 @@ const SideDrawer = () => {
 
   const onsub = () => {
     setsubmit(true);
-    Axios.post("http://localhost:5000/laptop/add", {
+    Axios.post("http://localhost:5000/prebuild/add", {
       ...set,
     })
       .then((res) => {
         setsubmit(false);
         toast({
           title: "laptop Added",
-          description: "We've Added laptop in database",
+          description: "We've Added prebuild in database",
           status: "success",
           duration: 9000,
           isClosable: true,
@@ -71,7 +72,7 @@ const SideDrawer = () => {
   return (
     <>
       <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>
-        Add Laptop
+        Add prebuild
       </Button>
       <Drawer
         isOpen={isOpen}
@@ -82,13 +83,15 @@ const SideDrawer = () => {
         <DrawerOverlay>
           <DrawerContent>
             <DrawerCloseButton />
-            <DrawerHeader borderBottomWidth="1px">Add New Laptop</DrawerHeader>
+            <DrawerHeader borderBottomWidth="1px">
+              Add New prebuild
+            </DrawerHeader>
 
             <DrawerBody>
               <form onSubmit={onsub}>
                 <Stack spacing="24px">
                   <Box>
-                    <FormLabel htmlFor="username">Name</FormLabel>
+                    <FormLabel htmlFor="username">name</FormLabel>
                     <Input
                       ref={firstField}
                       id="username"
@@ -98,35 +101,11 @@ const SideDrawer = () => {
                   </Box>
 
                   <Box>
-                    <FormLabel htmlFor="brand">Brand</FormLabel>
+                    <FormLabel htmlFor="brand">processor:</FormLabel>
                     <InputGroup>
                       <Input
                         type="text"
                         id="brand"
-                        onChange={onchange}
-                        name="brand"
-                      />
-                    </InputGroup>
-                  </Box>
-
-                  <Box>
-                    <FormLabel htmlFor="model">Model</FormLabel>
-                    <InputGroup>
-                      <Input
-                        type="text"
-                        id="model"
-                        onChange={onchange}
-                        name="model"
-                      />
-                    </InputGroup>
-                  </Box>
-
-                  <Box>
-                    <FormLabel htmlFor="processor">Processor</FormLabel>
-                    <InputGroup>
-                      <Input
-                        type="text"
-                        id="processor"
                         onChange={onchange}
                         name="processor"
                       />
@@ -134,23 +113,35 @@ const SideDrawer = () => {
                   </Box>
 
                   <Box>
-                    <FormLabel htmlFor="ram">ram</FormLabel>
+                    <FormLabel htmlFor="model">motherboard</FormLabel>
                     <InputGroup>
                       <Input
                         type="text"
-                        id="ram"
+                        id="model"
                         onChange={onchange}
-                        name="ram"
+                        name="motherboard"
                       />
                     </InputGroup>
                   </Box>
 
                   <Box>
-                    <FormLabel htmlFor="storage">storage</FormLabel>
+                    <FormLabel htmlFor="processor">graphicscard</FormLabel>
                     <InputGroup>
                       <Input
                         type="text"
-                        id="storage"
+                        id="processor"
+                        onChange={onchange}
+                        name="graphicscard"
+                      />
+                    </InputGroup>
+                  </Box>
+
+                  <Box>
+                    <FormLabel htmlFor="ram">storage</FormLabel>
+                    <InputGroup>
+                      <Input
+                        type="text"
+                        id="ram"
                         onChange={onchange}
                         name="storage"
                       />
@@ -158,25 +149,48 @@ const SideDrawer = () => {
                   </Box>
 
                   <Box>
-                    <FormLabel htmlFor="graphics_card">graphics_card</FormLabel>
+                    <FormLabel htmlFor="storage">cabinet</FormLabel>
+                    <InputGroup>
+                      <Input
+                        type="text"
+                        id="storage"
+                        onChange={onchange}
+                        name="cabinet"
+                      />
+                    </InputGroup>
+                  </Box>
+
+                  <Box>
+                    <FormLabel htmlFor="graphics_card">psu</FormLabel>
                     <InputGroup>
                       <Input
                         type="text"
                         id="graphics_card"
-                        name="graphics_card"
+                        name="psu"
+                        onChange={onchange}
+                      />
+                    </InputGroup>
+                  </Box>
+                  <Box>
+                    <FormLabel htmlFor="graphics_card">ram</FormLabel>
+                    <InputGroup>
+                      <Input
+                        type="text"
+                        id="graphics_card"
+                        name="ram"
                         onChange={onchange}
                       />
                     </InputGroup>
                   </Box>
 
                   <Box>
-                    <FormLabel htmlFor="features">features</FormLabel>
+                    <FormLabel htmlFor="features">cooler</FormLabel>
                     <InputGroup>
                       <Input
                         type="text"
                         id="features"
                         onChange={onchange}
-                        name="features"
+                        name="cooler"
                       />
                     </InputGroup>
                   </Box>
@@ -185,7 +199,7 @@ const SideDrawer = () => {
                     <FormLabel htmlFor="image">image</FormLabel>
                     <InputGroup>
                       <Input
-                        type="file"
+                        type="text"
                         id="image"
                         onChange={onchange}
                         name="image"
@@ -228,4 +242,4 @@ const SideDrawer = () => {
   );
 };
 
-export default SideDrawer;
+export default SideDrawer1;

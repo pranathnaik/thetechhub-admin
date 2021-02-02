@@ -40,7 +40,7 @@ router.post("/register", async (req, res) => {
     const savedadmin = await newadmin.save();
     res.send(savedadmin);
   } catch (err) {
-    res.status(500).json({ msg: `${err.message}` });
+    res.status(500).json({ msg: "You're offline. Check your connection." });
   }
 });
 
@@ -68,7 +68,9 @@ router.post("/login", async (req, res) => {
       },
     });
   } catch (err) {
-    return res.status(500).json({ msg: err.message });
+    return res
+      .status(500)
+      .json({ msg: "You're offline. Check your connection." });
   }
 });
 

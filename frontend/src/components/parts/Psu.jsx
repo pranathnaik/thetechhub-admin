@@ -17,34 +17,33 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 
-const Ram = () => {
+const Psu = () => {
   const toast = useToast();
+  const [submit, setsubmit] = useState(false);
+  const [psu, setpsu] = useState([]);
   const [set, setval] = useState({
     name: "",
     brand: "",
     model: "",
-    speed: "",
-    memory: "",
-    qty: "",
-    type: "",
+    power: "",
+    efficiency: "",
     image: "",
     price: "",
   });
   const onchange = (event) => {
     setval({ ...set, [event.target.name]: event.target.value });
   };
-  const [Ram, setRam] = useState([]);
-  const [submit, setsubmit] = useState(false);
-  const addram = () => {
+  const addpsu = () => {
     setsubmit(true);
-    Axios.post("http://localhost:5000/ram/add", {
+
+    Axios.post("http://localhost:5000/psu/add", {
       ...set,
     })
       .then((res) => {
         setsubmit(false);
         toast({
-          title: "Ram Card Added",
-          description: "We've Added Ram card in database",
+          title: "Psu Added",
+          description: "We've Added Psu in database",
           status: "success",
           duration: 9000,
           isClosable: true,
@@ -61,67 +60,55 @@ const Ram = () => {
         });
       });
   };
+
   const removefunc = (id) => {
-    console.log(id._id);
-    Axios.delete(`http://localhost:5000/ram/delete/${id._id}`)
-      .then((res) => {
-        toast({
-          title: "Ram deleted",
-          description: "We've deleted Ram Card from db",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        });
-      })
-      .catch((err) => {
-        toast({
-          title: "There was an error",
-          description: `${err} occured`,
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
+    Axios.delete(`http://localhost:5000/psu/delete/${id._id}`).then(() => {
+      toast({
+        title: "Psu deleted",
+        description: `${id.name} Deleted`,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
       });
+    });
   };
 
   useEffect(() => {
-    Axios.get("http://localhost:5000/ram/view").then((response) => {
-      setRam(response.data);
+    Axios.get("http://localhost:5000/psu/view").then((response) => {
+      setpsu(response.data);
     });
-  }, [Ram]);
+  }, [psu]);
 
   return (
     <>
       <Flex>
-        <Box overflow="auto" w="75%" h="700px">
+        <Box overflow="auto" w="75%" h="90vh">
           <Table variant="striped" colorScheme="teal">
             <Thead>
               <Tr>
-                <Th>Name</Th>
-                <Th>Brand</Th>
+                <Th>name</Th>
+                <Th>brand</Th>
                 <Th>model</Th>
-                <Th>speed</Th>
-                <Th>memory</Th>
-                <Th>qty</Th>
-                <Th>type</Th>
+                <Th>power</Th>
+                <Th>efficiency</Th>
                 <Th>image</Th>
                 <Th>price</Th>
                 <Th>action</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {Ram.map((value) => {
+              {psu.map((value) => {
                 return (
                   <>
                     <Tr>
                       <Td>{value.name}</Td>
                       <Td>{value.brand}</Td>
                       <Td>{value.model}</Td>
-                      <Td>{value.speed}</Td>
-                      <Td>{value.memory}</Td>
-                      <Td>{value.qty}</Td>
-                      <Td>{value.type}</Td>
-                      <Td>{value.image}</Td>
+                      <Td>{value.power}</Td>
+                      <Td>{value.efficiency}</Td>
+                      <Td>
+                        <img src={value.image} alt="" />
+                      </Td>
                       <Td>{value.price}</Td>
                       <Td>
                         <Button
@@ -142,8 +129,7 @@ const Ram = () => {
         <Spacer />
         <Box w="20%">
           <FormControl enctype="multipart/form-data">
-            <FormLabel>Add GPU</FormLabel>
-
+            <FormLabel>Add PSU</FormLabel>
             <Input
               placeholder="Name"
               name="name"
@@ -163,33 +149,21 @@ const Ram = () => {
               onChange={onchange}
             />
             <Input
-              placeholder="Speed"
-              name="speed"
+              placeholder="power"
+              name="power"
+              type="number"
+              onChange={onchange}
+            />
+            <Input
+              placeholder="efficiency"
+              name="efficiency"
               type="text"
               onChange={onchange}
             />
             <Input
-              placeholder="Memory"
-              name="memory"
               type="text"
-              onChange={onchange}
-            />
-            <Input
-              placeholder="qty"
-              name="qty"
-              type="text"
-              onChange={onchange}
-            />
-            <Input
-              placeholder="type"
-              name="type"
-              type="text"
-              onChange={onchange}
-            />
-            <Input
-              placeholder="file"
+              placeholder="image"
               name="image"
-              type="file"
               onChange={onchange}
             />
             <Input
@@ -203,9 +177,9 @@ const Ram = () => {
               width="100%"
               colorScheme="green"
               borderColor="green.500"
+              onClick={addpsu}
               isLoading={submit}
               loadingText="Submitting"
-              onClick={addram}
             >
               Add
             </Button>
@@ -217,4 +191,4 @@ const Ram = () => {
   );
 };
 
-export default Ram;
+export default Psu;

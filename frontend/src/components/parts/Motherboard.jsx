@@ -16,35 +16,33 @@ import {
   Box,
   Spacer,
 } from "@chakra-ui/react";
-const Storage = () => {
+const Motherboard = () => {
   const [set, setval] = useState({
     name: "",
     brand: "",
-    model: "",
-    rpm: "",
-    cache: "",
-    type: "",
-    interface: "",
+    form_factor: "",
+    chipset: "",
+    socket_type: "",
+    memory_slot: "",
     image: "",
     price: "",
   });
-  const [storage, setstorage] = useState([]);
-  console.log(storage);
   const onchange = (event) => {
     setval({ ...set, [event.target.name]: event.target.value });
   };
+  const [motherboard, setmotherboard] = useState([]);
   const toast = useToast();
   const [submit, setsubmit] = useState(false);
-  const addstorage = () => {
+  const addmotherboard = () => {
     setsubmit(true);
-    Axios.post("http://localhost:5000/storage/add", {
+    Axios.post("http://localhost:5000/motherboard/add", {
       ...set,
     })
       .then((res) => {
         setsubmit(false);
         toast({
-          title: "Storage Added",
-          description: "We've Added Storage in database",
+          title: "Processor Added",
+          description: "We've Added processor in database",
           status: "success",
           duration: 9000,
           isClosable: true,
@@ -54,7 +52,7 @@ const Storage = () => {
         setsubmit(false);
         toast({
           title: "There was an error",
-          description: `${err.response.data.msg} occured`,
+          description: `${err} occured`,
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -62,55 +60,57 @@ const Storage = () => {
       });
   };
   const removefunc = (id) => {
-    Axios.delete(`http://localhost:5000/storage/delete/${id._id}`).then(() => {
-      toast({
-        title: "Storage deleted",
-        description: `${id.name} Deleted`,
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      });
-    });
+    Axios.delete(`http://localhost:5000/motherboard/delete/${id._id}`).then(
+      () => {
+        toast({
+          title: "Processor deleted",
+          description: `${id.name} Deleted`,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+    );
   };
 
   useEffect(() => {
-    Axios.get("http://localhost:5000/storage/view").then((response) => {
-      setstorage(response.data);
+    Axios.get("http://localhost:5000/motherboard/view").then((response) => {
+      setmotherboard(response.data);
     });
-  }, [storage]);
+  }, [motherboard]);
 
   return (
     <>
       <Flex>
-        <Box overflow="auto" w="75%" h="80vh">
+        <Box overflow="auto" w="75%" h="90vh">
           <Table variant="striped" colorScheme="teal">
             <Thead>
               <Tr>
                 <Th>Name</Th>
                 <Th>Brand</Th>
-                <Th>model</Th>
-                <Th>rpm</Th>
-                <Th>cache</Th>
-                <Th>type </Th>
-                <Th>interface</Th>
-                <Th>image</Th>
+                <Th>formFactor</Th>
+                <Th>chipset</Th>
+                <Th>socketType</Th>
+                <Th>memorySlot </Th>
+                <Th>image </Th>
                 <Th>price</Th>
                 <Th>action</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {storage.map((value) => {
+              {motherboard.map((value) => {
                 return (
                   <>
                     <Tr>
                       <Td>{value.name}</Td>
                       <Td>{value.brand}</Td>
-                      <Td>{value.model}</Td>
-                      <Td>{value.rpm}</Td>
-                      <Td>{value.cache}</Td>
-                      <Td>{value.type}</Td>
-                      <Td>{value.interface}</Td>
-                      <Td>{value.image}</Td>
+                      <Td>{value.form_factor}</Td>
+                      <Td>{value.chipset}</Td>
+                      <Td>{value.socket_type}</Td>
+                      <Td>{value.memory_slot}</Td>
+                      <Td>
+                        <img src={value.image} alt="" />
+                      </Td>
                       <Td>{value.price}</Td>
                       <Td>
                         <Button
@@ -131,7 +131,7 @@ const Storage = () => {
         <Spacer />
         <Box w="20%">
           <FormControl>
-            <FormLabel>Add storage</FormLabel>
+            <FormLabel>Add Motherboard</FormLabel>
             <Input
               placeholder="Name"
               name="name"
@@ -146,38 +146,32 @@ const Storage = () => {
             />
             <Input
               placeholder="Form Factor"
-              name="model"
+              name="form_factor"
               type="text"
               onChange={onchange}
             />
             <Input
-              placeholder="rpm"
-              name="rpm"
+              placeholder="Chipset"
+              name="chipset"
               type="text"
               onChange={onchange}
             />
             <Input
-              placeholder="cache"
-              name="cache"
+              placeholder="Socket Type"
+              name="socket_type"
               type="text"
               onChange={onchange}
             />
             <Input
-              placeholder="type"
-              name="type"
-              type="text"
+              placeholder="Memory Slot"
+              name="memory_slot"
+              type="number"
               onChange={onchange}
             />
             <Input
-              placeholder="interface"
-              name="interface"
-              type="text"
-              onChange={onchange}
-            />
-            <Input
-              placeholder="file"
+              placeholder="image"
               name="image"
-              type="file"
+              type="text"
               onChange={onchange}
             />
             <Input
@@ -192,7 +186,7 @@ const Storage = () => {
               borderColor="green.500"
               isLoading={submit}
               loadingText="Submitting"
-              onClick={addstorage}
+              onClick={addmotherboard}
             >
               Add
             </Button>
@@ -204,4 +198,4 @@ const Storage = () => {
   );
 };
 
-export default Storage;
+export default Motherboard;

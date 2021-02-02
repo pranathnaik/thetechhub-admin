@@ -91,14 +91,14 @@ const GraphicsCard = () => {
   return (
     <>
       <Flex>
-        <Box overflow="auto" w="75%" h="700px">
+        <Box overflow="auto" w="75%" h="90vh">
           <Table variant="striped" colorScheme="teal">
             <Thead>
               <Tr>
                 <Th>Name</Th>
                 <Th>Brand</Th>
                 <Th>model</Th>
-                <Th>chipset</Th>
+
                 <Th>memory</Th>
                 <Th>clock speed</Th>
                 <Th>interface</Th>
@@ -115,11 +115,13 @@ const GraphicsCard = () => {
                       <Td>{value.name}</Td>
                       <Td>{value.brand}</Td>
                       <Td>{value.model}</Td>
-                      <Td>{value.chipset}</Td>
+
                       <Td>{value.memory}</Td>
                       <Td>{value.clock_speed}</Td>
                       <Td>{value.interface}</Td>
-                      <Td>{value.image}</Td>
+                      <Td>
+                        <img src={value.image} alt="" />
+                      </Td>
                       <Td>{value.price}</Td>
                       <Td>
                         <Button
@@ -160,12 +162,7 @@ const GraphicsCard = () => {
               name="model"
               onChange={onchange}
             />
-            <Input
-              placeholder="chipset"
-              type="text"
-              name="chipset"
-              onChange={onchange}
-            />
+
             <Input
               placeholder="Memory"
               type="text"
@@ -186,7 +183,7 @@ const GraphicsCard = () => {
             />
             <Input
               placeholder="image"
-              type="file"
+              type="text"
               name="image"
               onChange={onchange}
             />

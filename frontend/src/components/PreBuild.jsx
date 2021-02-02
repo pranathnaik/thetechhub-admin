@@ -11,15 +11,13 @@ import {
   useToast,
   Box,
 } from "@chakra-ui/react";
-import SideDrawer from "./layout/SideDrawer";
-
 import Axios from "axios";
-
-const Laptop = () => {
+import SideDrawer from "./layout/SideDrawer1";
+const PreBuild = () => {
   const toast = useToast();
   const [laptop, setlaptop] = useState([]);
   const removefunc = async (id) => {
-    await Axios.delete(`http://localhost:5000/laptop/delete/${id._id}`).then(
+    await Axios.delete(`http://localhost:5000/prebuild/delete/${id._id}`).then(
       () => {
         toast({
           title: "laptop deleted",
@@ -33,12 +31,11 @@ const Laptop = () => {
   };
 
   useEffect(() => {
-    Axios.get("http://localhost:5000/laptop/view")
+    Axios.get("http://localhost:5000/prebuild/view")
       .then((response) => {
         setlaptop(response.data);
       })
       .catch((err) => {
-        console.log(err.response);
         toast({
           title: "there was an error",
           description: `${err.response.data.msg}`,
@@ -52,21 +49,22 @@ const Laptop = () => {
     <>
       <Flex>
         <SideDrawer />
-        <Box overflow="auto" w="100%" h="80vh">
+        <Box overflow="auto" w="100%" h="90vh">
           <Table variant="striped" colorScheme="teal">
             <Thead>
               <Tr>
                 <Th>name</Th>
-                <Th>brand</Th>
-                <Th>model</Th>
                 <Th>processor</Th>
-                <Th>ram</Th>
+                <Th>motherboard</Th>
+                <Th>graphicscard:</Th>
                 <Th>storage</Th>
-                <Th>graphics_card</Th>
-                <Th>features</Th>
+                <Th>cabinet</Th>
+                <Th>psu</Th>
+                <Th>ram</Th>
+                <Th>cooler</Th>
                 <Th>image</Th>
                 <Th>price</Th>
-                <Th>edit</Th>
+
                 <Th>delete</Th>
               </Tr>
             </Thead>
@@ -76,14 +74,17 @@ const Laptop = () => {
                   <>
                     <Tr>
                       <Td>{value.name}</Td>
-                      <Td>{value.brand}</Td>
-                      <Td>{value.model}</Td>
                       <Td>{value.processor}</Td>
-                      <Td>{value.ram}</Td>
+                      <Td>{value.motherboard}</Td>
+                      <Td>{value.graphicscard}</Td>
                       <Td>{value.storage}</Td>
-                      <Td>{value.graphics_card}</Td>
-                      <Td>{value.features}</Td>
-                      <Td>{value.image}</Td>
+                      <Td>{value.cabinet}</Td>
+                      <Td>{value.psu}</Td>
+                      <Td>{value.ram}</Td>
+                      <Td>{value.cooler}</Td>
+                      <Td>
+                        <img src={value.image} alt="" />
+                      </Td>
                       <Td>{value.price}</Td>
                       <Td>
                         <Button
@@ -106,4 +107,4 @@ const Laptop = () => {
   );
 };
 
-export default Laptop;
+export default PreBuild;
